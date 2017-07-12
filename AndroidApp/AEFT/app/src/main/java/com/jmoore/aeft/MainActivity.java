@@ -59,13 +59,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.LENGTH_SHORT).show();
 
 
-            et.setText(shortFileName);
+
 
         } else {
             Toast.makeText(this,
                     "No File Selected, Cancel Or Back Pressed",
                     Toast.LENGTH_SHORT).show();
-            et.setText("");
+
         }
 
         //NETWORK STUFF HERE

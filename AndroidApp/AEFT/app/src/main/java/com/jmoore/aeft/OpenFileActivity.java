@@ -37,7 +37,7 @@ public class OpenFileActivity extends Activity
 	
 	String currentPath = null;
 	
-	String selectedFilePath = null; /* Full path, i.e. /mnt/sdcard/folder/file.txt */
+	public String selectedFilePath = null; /* Full path, i.e. /mnt/sdcard/folder/file.txt */
 	String selectedFileName = null; /* File Name Only, i.e file.txt */
 	
 	@Override
@@ -130,20 +130,26 @@ public class OpenFileActivity extends Activity
 	@Override
 	public void onClick(View v) {
 		Intent intent;
-		
-		switch (v.getId()) {
-		case R.id.BtnOK:
+        //Toast.makeText(this, v.getTag().toString(),Toast.LENGTH_SHORT).show();
+        //switch (v.getId()) {
+		//case R.id.BtnOK:
 			
 		    intent = new Intent();
-		    intent.putExtra("fileName", selectedFilePath);
-		    intent.putExtra("shortFileName", selectedFileName);
-		    setResult(RESULT_OK, intent);
+            //
+            Toast.makeText(this,"Intent Created",Toast.LENGTH_SHORT).show();
+            //
+            intent.putExtra("fileName", selectedFilePath);
+		    //
+            Toast.makeText(this,"DIS EXTRA SUFF S+DIEN",Toast.LENGTH_SHORT).show();
+            //
+            intent.putExtra("shortFileName", selectedFileName);
+		    setResult(2, intent);
 		    
 			this.finish();
 			
-			break;
-		case R.id.BtnCancel:
-			
+		//	break;
+		//case R.id.BtnCancel:
+		/*
 			intent = new Intent();
 		    intent.putExtra("fileName", "");
 		    intent.putExtra("shortFileName", "");
@@ -152,13 +158,13 @@ public class OpenFileActivity extends Activity
 			this.finish();
 			
 			break;
-		}
+		}*/
 	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		String entryName = (String)parent.getItemAtPosition(position); 
+		String entryName = (String)parent.getItemAtPosition(position);
 		if (entryName.endsWith("/")) {
 			setCurrentPath(currentPath + entryName);
 		} else {
@@ -166,8 +172,7 @@ public class OpenFileActivity extends Activity
 			
 			selectedFileName = entryName;
 			
-			this.setTitle(this.getResources().getString(R.string.title_activity_open_file)
-					+ "[" + entryName + "]");
+			this.setTitle(this.getResources().getString(R.string.title_activity_open_file)+"["+entryName+"]");
 		}
 	}
 }
