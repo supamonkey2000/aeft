@@ -23,6 +23,9 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:label="@string/title_activity_open_file" android:name=".OpenFileActivity"> </activity>
+
     </application>
 
 </manifest>
