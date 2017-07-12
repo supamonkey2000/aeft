@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -24,11 +25,9 @@ import java.io.OutputStream;
 import java.net.Socket;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    public OutputStream out = null;
-    public Socket socket = null;
-    public File myFile = null;
-    public byte[] buffer;
+
     Button button;
+    public String IP;
 
 
     @Override
@@ -41,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View v) {
+        EditText et = (EditText) findViewById(R.id.editText3);
+        IP = et.getText().toString();
         Intent i;
         Toast.makeText(this,"INTENTNT CRETED",Toast.LENGTH_LONG).show();
         i = new Intent(this, OpenFileActivity.class);
@@ -49,9 +50,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        EditText et = (EditText) findViewById(R.id.editText3);
+        String fileName = null;
         if (resultCode == 2) {
-            String fileName = data.getStringExtra("fileName");
+            fileName = data.getStringExtra("fileName");
             String shortFileName = data.getStringExtra("shortFileName");
 
             Toast.makeText(this,
@@ -69,11 +70,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         //NETWORK STUFF HERE
+        sendTheFile ooh = new sendTheFile();
+        ooh.execute(fileName,IP);
+
+    }
+}
+
+// NETWORKING BAM SHIZZLE GOES DOWN HIZZLE
+class sendTheFile extends AsyncTask<String, Void, String> {
+    public OutputStream out = null;
+    public Socket socket = null;
+    public File myFile = null;
+    public byte[] buffer;
+    @Override
+    protected String doInBackground(String[] params) {
+        String IP = params[1];
+        myFile = new File(params[0]);
         try {
-            String IP = et.getText().toString();
-            Toast.makeText(this,"Connecting to: " + IP,Toast.LENGTH_SHORT).show();
             socket = new Socket(IP, 25000);
-            Toast.makeText(this,"Connected!",Toast.LENGTH_SHORT).show();
             FileInputStream fis = new FileInputStream(myFile);
             BufferedInputStream in = new BufferedInputStream(fis);
             in.read(buffer, 0, buffer.length);
@@ -83,7 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             socket.close();
         } catch (Exception ex) {
             ex.printStackTrace();
-            Toast.makeText(this,"THIS DID NOT WORK LIKE IT SHOULD HAVE",Toast.LENGTH_SHORT).show();
+            Log.i("TAG","THE THINGY FAILED TO SEND IN THE SENDTHEFILE CLASS");
         }
+        return "";
     }
 }
