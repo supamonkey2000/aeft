@@ -42,8 +42,9 @@ public class AEFT implements ActionListener {
 	
 	public void wait_for_file() throws IOException {
 		socket = server.accept();
+		System.out.println("INFO: Accepted connection.");
 		byte[] buffer = new byte[maxsize];
-		InputStream is = socket.getInputStream();
+		InputStream is = socket.getInputStream(); System.out.println("INFO: Getting InputStream.");
 		file_name = fileTF.getText();
 		File file = new File(file_name);
 		file.createNewFile();
