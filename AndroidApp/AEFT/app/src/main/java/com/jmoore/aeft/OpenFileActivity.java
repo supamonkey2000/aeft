@@ -135,13 +135,7 @@ public class OpenFileActivity extends Activity
 		//case R.id.BtnOK:
 			
 		    intent = new Intent();
-            //
-            Toast.makeText(this,"Intent Created",Toast.LENGTH_SHORT).show();
-            //
             intent.putExtra("fileName", selectedFilePath);
-		    //
-            Toast.makeText(this,"DIS EXTRA SUFF S+DIEN",Toast.LENGTH_SHORT).show();
-            //
             intent.putExtra("shortFileName", selectedFileName);
 		    setResult(2, intent);
 		    

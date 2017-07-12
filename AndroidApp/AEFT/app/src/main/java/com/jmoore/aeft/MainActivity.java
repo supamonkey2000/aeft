@@ -71,7 +71,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //NETWORK STUFF HERE
         try {
             String IP = et.getText().toString();
+            Toast.makeText(this,"Connecting to: " + IP,Toast.LENGTH_SHORT).show();
             socket = new Socket(IP, 25000);
+            Toast.makeText(this,"Connected!",Toast.LENGTH_SHORT).show();
             FileInputStream fis = new FileInputStream(myFile);
             BufferedInputStream in = new BufferedInputStream(fis);
             in.read(buffer, 0, buffer.length);
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             socket.close();
         } catch (Exception ex) {
             ex.printStackTrace();
+            Toast.makeText(this,"THIS DID NOT WORK LIKE IT SHOULD HAVE",Toast.LENGTH_SHORT).show();
         }
     }
 }
