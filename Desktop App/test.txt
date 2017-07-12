@@ -1,0 +1,19 @@
+Persian		0	A0	B0	C0	D3	E3	F2
+Himalayan	1	A0	B0	C0	D0	E2	F0
+Siamese		2	A0	B2	C2	D0	E2	F0
+Hairless		3	A6	B3	C2	D0	E3	F1
+Bengal		4	A3	B1	C1	D0	E2	F0
+Ocicat		5	A5	B2	C1	D0	E2	F0
+Ragamuffin	6	A0	B0	C0	D0	E1	F1
+Scottish Folds	7	A2	B2	C1	D0	E2	F1
+Siberian		8	A2	B0	C0	D0	E1	F1
+British Shorthair	9	A2	B1	C1	D1	E1	F2
+
+
+			0	1	2	3	4	5	6
+Color		A	White	Black	Grey	Brown	Gold	Orange	None
+Hair length	B	Long	Medium	Short	None
+Shedding		C	Lots	Average	None
+Friendliness	D	VFriendly	Friendly	Average	UFriendly	VUFriendly
+Health		E	Great	Good	Average	Bad	VBad
+Intelligence	F	VSmart	Smart	Average	Stupid	VStupid
