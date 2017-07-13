@@ -11,23 +11,22 @@ public class AEFT implements ActionListener {
 	public ServerSocket server = null;
 	public boolean server_up = false;
 	public Socket socket = null;
-	public int maxsize = 36700160;
+	public int maxsize = 999999999;
 	public String file_name = "file.txt";
 	public int byteread, current;
 	public JTextField fileTF;
 
 	public static String get_address() {
-		try{return Inet4Address.getLocalHost().getHostAddress();}catch(Exception ex){return "ERROR: IP could not be resolved.";}
+		try{return Inet4Address.getLocalHost().getHostAddress();}catch(Exception ex){return"ERROR: IP could not be resolved.";}
 	}
 
 	public void start_server() {
 		String start_fail = "ERROR: Failed to start server.";
-		//JOptionPane.showMessageDialog(null, "ERROR: Failed to start server.");
 		if(!server_up) {
 			try {
 				server = new ServerSocket(25000);
 				server_up = true;
-				JOptionPane.showMessageDialog(null, "Server started successfully.");
+				//JOptionPane.showMessageDialog(null, "Server started successfully."); //Must remove this line for looping
 				System.out.println("INFO: Server started successfully.");
 				wait_for_file();
 			}catch(Exception ex) {
@@ -39,31 +38,40 @@ public class AEFT implements ActionListener {
 			System.out.println(start_fail + ": Server already running!");
 		}
 	}
-	
-	public void wait_for_file() throws IOException {
-		socket = server.accept();
-		System.out.println("INFO: Accepted connection.");
-		byte[] buffer = new byte[maxsize];
-		InputStream is = socket.getInputStream(); System.out.println("INFO: Getting InputStream.");
-		file_name = fileTF.getText();
-		File file = new File(file_name);
-		file.createNewFile();
-		FileOutputStream fos = new FileOutputStream(file);
-		BufferedOutputStream out = new BufferedOutputStream(fos);
-		byteread = is.read(buffer, 0, buffer.length);
-		current = byteread;
-		do {
-			byteread = is.read(buffer, 0, buffer.length - current);
-			if(byteread >= 0) current += byteread;
-		} while (byteread > -1);
-		out.write(buffer, 0, current);
-		out.flush();
-		fos.close();
-		is.close();
-		System.exit(0);
+
+	public String getRandom() {
+		return (Double.toString(Math.random() * 100)).replace(".","");
 	}
 	
-	
+	public void wait_for_file() {
+		try {
+			socket = server.accept();
+			byte[] buffer = new byte[maxsize];
+			InputStream is = socket.getInputStream();
+			file_name = fileTF.getText();
+			String[] splitfile = file_name.split("\\.");
+			//File file = new File(splitfile[0] + "_" + getRandom() + "." + splitfile[1]);
+			File file = new File(file_name);
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			BufferedOutputStream out = new BufferedOutputStream(fos);
+			byteread = is.read(buffer, 0, buffer.length);
+			current = byteread;
+			do {
+				byteread = is.read(buffer, 0, buffer.length - current);
+				System.out.println(byteread);
+				if(byteread >= 0) current += byteread;
+			} while (byteread > -1);
+			out.write(buffer, 0, current);
+			out.flush();
+			fos.close();
+			is.close();
+			server.close();
+		}catch(Exception ex) {ex.printStackTrace();}
+		//server_up = true;
+		//start_server();
+	}
+
 	public void createAndShowGUI() {
 		JFrame frame = new JFrame("Android Easy File Transfer");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -75,12 +83,11 @@ public class AEFT implements ActionListener {
 		gbc.weightx = 0.25;
 		gbc.weighty = 0.25;
 
-
 		JLabel ip = new JLabel("Your local IP is: " + get_address());
 		gbc.gridx = 0;gbc.gridy = 0;
 		frame.add(ip,gbc);
 
-		fileTF = new JTextField("<path and file name to save>");
+		fileTF = new JTextField("C:\\Users\\Josh\\Desktop\\fileingtxt");
 		gbc.gridx = 0;gbc.gridy = 1;
 		frame.add(fileTF, gbc);
 
@@ -108,12 +115,16 @@ public class AEFT implements ActionListener {
 		}
 	}
 
-	public static void main(String args[]) {
-		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ex) { ex.printStackTrace();}
-		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+	public static void main(String args[]){
+		/////////
+		AEFT temp = new AEFT();
+		temp.getRandom();
+		/////////
+		try{UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}catch(Exception ex){ex.printStackTrace();}
+		javax.swing.SwingUtilities.invokeLater(new Runnable(){
 			@Override
-			public void run() {
-				AEFT gui = new AEFT();
+			public void run(){
+				AEFT gui=new AEFT();
 				gui.createAndShowGUI();
 			}
 		});		
