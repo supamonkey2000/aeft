@@ -42,24 +42,23 @@ public class AEFT implements ActionListener{
 	}
 	
 	public void wait_for_file(){
+		int count;
 		try{
 			socket=server.accept();
-			byte[] buffer=new byte[maxsize];
-			InputStream is=socket.getInputStream();
+			byte[]buffer=new byte[maxsize];
 			file_name=fileTF.getText();
-			String[] splitfile=file_name.split("\\.");
+			String[]splitfile=file_name.split("\\.");
 			File file=new File(splitfile[0]+"_"+getRandom()+"."+splitfile[1]);
 			file.createNewFile();
+			InputStream is=socket.getInputStream();
 			FileOutputStream fos=new FileOutputStream(file);
 			BufferedOutputStream out=new BufferedOutputStream(fos);
-			byteread=is.read(buffer,0,buffer.length);
-			current=byteread;
-			do{
-				byteread=is.read(buffer,0,buffer.length-current);
-				System.out.println(byteread);
-				if(byteread>=0)current+=byteread;
-			}while(byteread>-1);
-			out.write(buffer,0,current);
+			@SuppressWarnings("unused")
+			long total=0;
+			while((count=is.read(buffer,0,buffer.length))!=-1){
+				total+=count;
+				out.write(buffer,0,count);
+			}
 			out.flush();
 			fos.close();
 			is.close();
@@ -69,7 +68,7 @@ public class AEFT implements ActionListener{
 		start_server();
 	}
 
-	public void createAndShowGUI() {
+	public void createAndShowGUI(){
 		JFrame frame=new JFrame("Android Easy File Transfer");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(320,240);
