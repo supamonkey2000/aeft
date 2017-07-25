@@ -14,10 +14,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     Button button;
     public String IP;
+    String thefilename;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -29,12 +31,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void onClick(View v){
-        EditText et=(EditText)findViewById(R.id.editText3);
-        IP=et.getText().toString();
-        Intent i;
-        i=new Intent(this,OpenFileActivity.class);
-        this.setContentView(R.layout.activity_open_file);
-        this.startActivityForResult(i,2);
+        if(v.getId()==findViewById(R.id.sendB).getId()) {
+            EditText et = (EditText) findViewById(R.id.editText3);
+            IP = et.getText().toString();
+            Intent i;
+            i = new Intent(this, OpenFileActivity.class);
+            this.setContentView(R.layout.activity_open_file);
+            this.startActivityForResult(i, 2);
+        }
+        else {
+            sendTheFile ooh = new sendTheFile();
+            ooh.execute(thefilename,IP);
+        }
     }
 
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
@@ -44,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else{
             Toast.makeText(this,"No File Selected, Cancel Or Back Pressed",Toast.LENGTH_SHORT).show();
         }
-        sendTheFile ooh=new sendTheFile();
-        ooh.execute(fileName,IP);
+        thefilename = fileName;
     }
 }
 

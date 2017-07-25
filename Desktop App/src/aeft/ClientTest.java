@@ -7,7 +7,7 @@ public class ClientTest {
 	
 	public static OutputStream out = null;
 	public static Socket socket = null;
-	public static File myFile = new File("C:\\Users\\Josh\\Desktop\\ctas.txt");
+	public static File myFile = new File("C:\\Users\\Josh\\Desktop\\MTKV262.zip");
 	public static byte[] buffer = new byte[(int) myFile.length()];
 
 	public static void main(String[] args) throws IOException{

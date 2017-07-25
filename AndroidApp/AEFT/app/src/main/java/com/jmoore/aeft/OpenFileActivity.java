@@ -53,7 +53,7 @@ public class OpenFileActivity extends Activity implements OnClickListener,OnItem
 		currentPath=path;
 		File[] allEntries=new File(path).listFiles();
         
-	    for (int i=0;i<allEntries.length;i++){
+	    for(int i=0;i<allEntries.length;i++){
 	    	if(allEntries[i].isDirectory()){
 	    		folders.add(allEntries[i].getName());
 	    	}else if(allEntries[i].isFile()){
