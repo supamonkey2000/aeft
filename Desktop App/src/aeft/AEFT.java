@@ -15,18 +15,18 @@ public class AEFT implements ActionListener{
 	public int byteread,current;
 	public JTextField fileTF;
 
-	public static String get_address(){
+	public static String getAddress(){
 		try{return Inet4Address.getLocalHost().getHostAddress();}catch(Exception ex){return"ERROR: IP could not be resolved.";}
 	}
 
-	public void start_server(){
+	public void startServer(){
 		String start_fail="ERROR: Failed to start server";
 		if(!server_up){
 			try{
 				server=new ServerSocket(25000);
 				server_up=true;
 				System.out.println("INFO: Server started successfully.");
-				wait_for_file();
+				waitForFile();
 			}catch(Exception ex){
 				JOptionPane.showMessageDialog(null,"ERROR: Failed to start server.");
 				System.out.println(start_fail+": Unknown error occured.");
@@ -41,7 +41,7 @@ public class AEFT implements ActionListener{
 		return(Double.toString(Math.random()*100)).replace(".","");
 	}
 	
-	public void wait_for_file(){
+	public void waitForFile(){
 		int count;
 		try{
 			socket=server.accept();
@@ -63,9 +63,19 @@ public class AEFT implements ActionListener{
 			fos.close();
 			is.close();
 			server.close();
+			//Garbage collecting
+			out=null;
+			fos=null;
+			is=null;
+			server=null;
+			buffer=null;
+			file_name=null;
+			file=null;
+			System.gc();
 		}catch(Exception ex){ex.printStackTrace();}
+		
 		server_up=false;
-		start_server();
+		startServer();
 	}
 
 	public void createAndShowGUI(){
@@ -79,7 +89,7 @@ public class AEFT implements ActionListener{
 		gbc.weightx=0.25;
 		gbc.weighty=0.25;
 
-		JLabel ip=new JLabel("Your local IP is: "+get_address());
+		JLabel ip=new JLabel("Your local IP is: "+getAddress());
 		gbc.gridx=0;gbc.gridy=0;
 		frame.add(ip,gbc);
 
@@ -107,7 +117,7 @@ public class AEFT implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 		switch(e.getActionCommand()){
 		case("Start Server"):
-			start_server();
+			startServer();
 		}
 	}
 

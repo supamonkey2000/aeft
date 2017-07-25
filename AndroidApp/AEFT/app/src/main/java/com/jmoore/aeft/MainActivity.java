@@ -42,7 +42,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.startActivityForResult(i,2);
         }
         else if(v.getId()==findViewById(R.id.realsendB).getId()){
-            sendTheFile stf=new sendTheFile(this);
+            File tmpFile=new File(thefilename);
+            SendTheFile stf=new SendTheFile(this,(int)tmpFile.length());
             stf.execute(thefilename,IP);
         }
     }
@@ -59,11 +60,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 }
 
-class sendTheFile extends AsyncTask<String,Integer,String>{
+class SendTheFile extends AsyncTask<String,Integer,String>{
     private int progress=0;
     private ProgressDialog mProgressDialog;
-
-    sendTheFile(Context cxt){
+    private int proglength=100;
+    SendTheFile(Context cxt,int length){
+        proglength=length;
         mProgressDialog=new ProgressDialog(cxt);
     }
 
@@ -71,7 +73,7 @@ class sendTheFile extends AsyncTask<String,Integer,String>{
         mProgressDialog.setTitle("Uploading");
         mProgressDialog.setMessage("Uploading, please wait!");
         mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMax(100);
+        mProgressDialog.setMax(proglength);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(false);
         mProgressDialog.show();
@@ -97,7 +99,8 @@ class sendTheFile extends AsyncTask<String,Integer,String>{
                 total+=count;
                 out.write(buffer,0,buffer.length);
                 Log.i("Upload progress",""+(int)((total*100)/buffer.length));
-                progress=(int)((total*100)/buffer.length);
+                //progress=(int)((total*100)/buffer.length);
+                progress=(int)(total);
                 publishProgress();
             }
             out.flush();
