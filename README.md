@@ -1,4 +1,7 @@
 # Android Easy File Transfer (AEFT)
+
+# AEFT is undergoing a major rework at the moment. All current builds are to be considered unstable.
+
 Android Easy File Transfer (or AEFT) is an easy way to send files
 from your Android mobile device to Windows, Linux, or Mac OS X
 systems running Java 8. While there are other file transfer apps
