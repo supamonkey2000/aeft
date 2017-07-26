@@ -28,9 +28,7 @@ public class OpenFileActivity extends Activity implements OnClickListener,OnItem
 	public String selectedFilePath=null;
 	String selectedFileName=null;
 
-    public String getFileName() {
-        return selectedFilePath;
-    }
+    public static String sharepath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -120,12 +118,12 @@ public class OpenFileActivity extends Activity implements OnClickListener,OnItem
 			selectedFilePath=currentPath+entryName;
 			selectedFileName=entryName;
 			this.setTitle(this.getResources().getString(R.string.title_activity_open_file)+"["+entryName+"]");
+            sharepath = selectedFilePath;
 		}
 		if(entryName.endsWith(".png") || entryName.endsWith(".jpg")) {
-            Intent intent;
-            intent = new Intent(getApplicationContext(), imageView.class);
-            imageView iv = new imageView(selectedFilePath);
-            iv.startActivity(intent);
+			Intent i;
+			i=new Intent(this,imageView.class);
+			this.startActivity(i);
         }
 	}
 }
