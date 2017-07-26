@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,8 +29,6 @@ public class OpenFileActivity extends Activity implements OnClickListener,OnItem
 	String currentPath=null;
 	public String selectedFilePath=null;
 	String selectedFileName=null;
-
-    public static String sharepath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
@@ -118,12 +118,10 @@ public class OpenFileActivity extends Activity implements OnClickListener,OnItem
 			selectedFilePath=currentPath+entryName;
 			selectedFileName=entryName;
 			this.setTitle(this.getResources().getString(R.string.title_activity_open_file)+"["+entryName+"]");
-            sharepath = selectedFilePath;
 		}
-		if(entryName.endsWith(".png") || entryName.endsWith(".jpg")) {
-			Intent i;
-			i=new Intent(this,imageView.class);
-			this.startActivity(i);
+		if(entryName.endsWith(".png")||entryName.endsWith(".jpg")){
+            ImageView iv=(ImageView)findViewById(R.id.ofaIV);
+            iv.setImageURI(Uri.parse(selectedFilePath));
         }
 	}
 }

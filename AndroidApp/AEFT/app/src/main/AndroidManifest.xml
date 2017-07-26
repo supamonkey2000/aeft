@@ -22,7 +22,6 @@
         <activity
             android:name=".OpenFileActivity"
             android:label="@string/title_activity_open_file"></activity>
-        <activity android:name=".imageView"></activity>
     </application>
 
 </manifest>

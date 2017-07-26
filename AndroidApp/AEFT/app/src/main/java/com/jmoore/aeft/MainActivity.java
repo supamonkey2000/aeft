@@ -32,24 +32,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         /////////////////////////////////////////////////////////////////////////////
-        if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            } else {
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},5);
+        if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
+            }else{
+                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},5);
             }
         }
         /////////////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////////////
-        if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
-                    Manifest.permission.INTERNET)) {
+        if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.INTERNET)!=PackageManager.PERMISSION_GRANTED){
+            if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.INTERNET)){
             }else{
-                ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{Manifest.permission.INTERNET},6);
+                ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.INTERNET},6);
             }
         }
         /////////////////////////////////////////////////////////////////////////////
@@ -139,7 +132,7 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
         try{
             long total=0;
             Socket socket=new Socket(IP,25000);
-            byte[] buffer=new byte[(int)myFile.length()];
+            byte[]buffer=new byte[(int)myFile.length()];
             FileInputStream fis=new FileInputStream(myFile);
             BufferedInputStream in=new BufferedInputStream(fis);
             OutputStream out=socket.getOutputStream();
@@ -160,7 +153,7 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
             ex.printStackTrace();
             Log.i("TAG","Failed to send file");
         }
-        return "test";
+        return"test";
     }
 
     protected void onPostExecute(String result){
