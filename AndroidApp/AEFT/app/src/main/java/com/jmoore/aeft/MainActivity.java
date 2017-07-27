@@ -3,11 +3,13 @@ package com.jmoore.aeft;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +21,9 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
     Button button,button2;
@@ -31,21 +35,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /////////////////////////////////////////////////////////////////////////////
         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)!=PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.READ_EXTERNAL_STORAGE)){
             }else{
                 ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},5);
             }
         }
-        /////////////////////////////////////////////////////////////////////////////
         if(ContextCompat.checkSelfPermission(MainActivity.this,Manifest.permission.INTERNET)!=PackageManager.PERMISSION_GRANTED){
             if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,Manifest.permission.INTERNET)){
             }else{
                 ActivityCompat.requestPermissions(MainActivity.this,new String[]{Manifest.permission.INTERNET},6);
             }
         }
-        /////////////////////////////////////////////////////////////////////////////
 
         button=(Button)findViewById(R.id.sendB);
         button.setOnClickListener(this);
@@ -58,17 +59,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch(requestCode){
             case 5:{
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    // PERMISSION GRANTED
+                    //PERMISSION GRANTED
                 }else{
-                    // NOT GRANTED
+                    //NOT GRANTED
                 }
                 return;
             }
             case 6:{
                 if(grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    // PERMISSION GRANTED
+                    //PERMISSION GRANTED
                 }else{
-                    // NOT GRANTED
+                    //NOT GRANTED
                 }
             }
         }
@@ -105,9 +106,11 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
     private int progress=0;
     private ProgressDialog mProgressDialog;
     private int proglength=100;
+    AlertDialog alertDialog;
     SendTheFile(Context cxt,int length){
         proglength=length;
         mProgressDialog=new ProgressDialog(cxt);
+        alertDialog=new AlertDialog.Builder(cxt).create();
     }
 
     protected void onPreExecute(){
@@ -132,17 +135,15 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
         int count;
         try{
             long total=0;
-            Socket socket=new Socket(IP,25000);
-            //byte[]buffer=new byte[(int)myFile.length()];
-            byte[] buffer = new byte[1000000];
+            Socket socket=new Socket();
+            socket.connect(new InetSocketAddress(IP,25000),5000);
+            byte[]buffer=new byte[((int)myFile.length())/100];
             FileInputStream fis=new FileInputStream(myFile);
             BufferedInputStream in=new BufferedInputStream(fis);
             OutputStream out=socket.getOutputStream();
             while((count=in.read(buffer,0,buffer.length))!=-1){
                 total+=count;
                 out.write(buffer,0,buffer.length);
-                Log.i("TOTAL",Long.toString(total));
-                Log.i("Upload progress",""+(int)((total*100)/buffer.length));
                 progress=(int)(total);
                 publishProgress();
             }
@@ -150,16 +151,36 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
             out.close();
             in.close();
             socket.close();
+            return"1";
         }catch(Exception ex){
             ex.printStackTrace();
-            Log.i("TAG","Failed to send file");
+            return"0";
         }
-        return"test";
     }
 
     protected void onPostExecute(String result){
-        System.out.println("IT FINISHED: "+result);
-        mProgressDialog.dismiss();
-        android.os.Process.killProcess(android.os.Process.myPid());
+        if(result.equals("1")){
+            mProgressDialog.dismiss();
+            alertDialog.setTitle("Success");
+            alertDialog.setMessage("File sent. The app will now close.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"OK",new DialogInterface.OnClickListener(){
+                public void onClick(DialogInterface dialog,int which){
+                    dialog.dismiss();
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                }
+            });
+            alertDialog.show();
+        }
+        else{
+            mProgressDialog.dismiss();
+            alertDialog.setTitle("Error");
+            alertDialog.setMessage("The file failed to send. Please restart the app and try again.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"OK",new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog,int which){
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
     }
 }
