@@ -121,6 +121,7 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
     }
 
     protected void onProgressUpdate(Integer...values){
+        mProgressDialog.setIndeterminate(false);
         mProgressDialog.setProgress(progress);
     }
 
@@ -132,7 +133,8 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
         try{
             long total=0;
             Socket socket=new Socket(IP,25000);
-            byte[]buffer=new byte[(int)myFile.length()];
+            //byte[]buffer=new byte[(int)myFile.length()];
+            byte[] buffer = new byte[1000000];
             FileInputStream fis=new FileInputStream(myFile);
             BufferedInputStream in=new BufferedInputStream(fis);
             OutputStream out=socket.getOutputStream();
@@ -141,7 +143,6 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
                 out.write(buffer,0,buffer.length);
                 Log.i("TOTAL",Long.toString(total));
                 Log.i("Upload progress",""+(int)((total*100)/buffer.length));
-                //progress=(int)((total*100)/buffer.length);
                 progress=(int)(total);
                 publishProgress();
             }
