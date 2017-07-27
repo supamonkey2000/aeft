@@ -10,7 +10,7 @@ public class AEFT implements ActionListener{
 	public ServerSocket server=null;
 	public boolean server_up=false;
 	public Socket socket=null;
-	public int maxsize=999999999;
+	static public int maxsize;//999999999;
 	public String file_name="file.txt";
 	public int byteread,current;
 	public JTextField fileTF;
@@ -121,7 +121,13 @@ public class AEFT implements ActionListener{
 		}
 	}
 
-	public static void main(String args[]){
+	public static void main(String[]args){
+		try{
+			maxsize=((int)Runtime.getRuntime().freeMemory())-500;
+		}catch(Exception ex){
+			System.out.println("Error retrieving RAM info: Your system probably exceeds needed RAM. If so you can ignore this error.");
+			maxsize=999999999;
+		}
 		try{UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}catch(Exception ex){ex.printStackTrace();}
 		javax.swing.SwingUtilities.invokeLater(new Runnable(){
 			@Override
