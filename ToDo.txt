@@ -2,5 +2,6 @@ TO DO LIST
 
 (Currently all list items are Windows/Android only)
 
+0. Fix the crash whenever I open the pictures folder, buttons don't show at bottom of screen on some folders, files fail to send EVERY TIME
 1. Try to get the Username so setting the path is easier
 2. Create a new folder called AEFT in Documents if it doesn't already exist
