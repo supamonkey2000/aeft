@@ -2,7 +2,6 @@ TO DO LIST
 
 (Currently all list items are Windows/Android only)
 
-1. Send file name before sending file.
-2. ^ Try to get the Username so setting the path is easier
-3. ^ Create a new folder called AEFT in Documents if it doesn't already exist
-4. Display thumbnails in the OpenFileActivity on Android instead of needing to tap them.
+1. Try to get the Username so setting the path is easier
+2. Create a new folder called AEFT in Documents if it doesn't already exist
+3. Display thumbnails in the OpenFileActivity on Android instead of needing to tap them.
