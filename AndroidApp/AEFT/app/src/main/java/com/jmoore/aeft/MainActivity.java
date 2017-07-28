@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import java.io.BufferedInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
@@ -137,6 +138,9 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
             long total=0;
             Socket socket=new Socket();
             socket.connect(new InetSocketAddress(IP,25000),5000);
+            DataOutputStream nameos=new DataOutputStream(socket.getOutputStream());
+            nameos.writeUTF(myFile.getName());
+            nameos.flush();
             byte[]buffer=new byte[((int)myFile.length())/100];
             FileInputStream fis=new FileInputStream(myFile);
             BufferedInputStream in=new BufferedInputStream(fis);
@@ -149,6 +153,7 @@ class SendTheFile extends AsyncTask<String,Integer,String>{
             }
             out.flush();
             out.close();
+            nameos.close();
             in.close();
             socket.close();
             return"1";

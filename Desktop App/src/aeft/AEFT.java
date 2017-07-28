@@ -46,9 +46,14 @@ public class AEFT implements ActionListener{
 		try{
 			socket=server.accept();
 			byte[]buffer=new byte[maxsize];
-			file_name=fileTF.getText();
-			String[]splitfile=file_name.split("\\.");
-			File file=new File(splitfile[0]+"_"+getRandom()+"."+splitfile[1]);
+			DataInputStream nameis=new DataInputStream(socket.getInputStream());
+			file_name=nameis.readUTF();
+			File file;
+			if(fileTF.getText().endsWith("\\")){
+				file=new File(fileTF.getText()+file_name);
+			}else{
+				file=new File(fileTF.getText()+"\\"+file_name);
+			}
 			file.createNewFile();
 			InputStream is=socket.getInputStream();
 			FileOutputStream fos=new FileOutputStream(file);
@@ -62,11 +67,12 @@ public class AEFT implements ActionListener{
 			out.flush();
 			fos.close();
 			is.close();
+			nameis.close();
 			server.close();
-			//Garbage collecting
 			out=null;
 			fos=null;
 			is=null;
+			nameis=null;
 			server=null;
 			buffer=null;
 			file_name=null;
@@ -93,7 +99,7 @@ public class AEFT implements ActionListener{
 		gbc.gridx=0;gbc.gridy=0;
 		frame.add(ip,gbc);
 
-		fileTF=new JTextField("C:\\Users\\Josh\\Desktop\\fileingtxt");
+		fileTF=new JTextField("C:\\Users\\Josh\\Desktop\\");
 		gbc.gridx=0;gbc.gridy=1;
 		frame.add(fileTF,gbc);
 
